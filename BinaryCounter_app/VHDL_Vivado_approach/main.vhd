@@ -41,7 +41,7 @@ architecture Behavioral of main is
     constant c_CNT_3_12 : natural := 16000000; -- 3.125 Hz
     constant c_CNT_1_56 : natural := 32000000; -- 1.56 Hz
 
-    constant c_CNT_2ms : natural := 50000; --its actually less than 2ms despite the name
+    constant c_CNT_2ms : natural := 200000; -- 2ms
     
     -- Counters
     signal r_CNT_50 : natural range 0 to c_CNT_50;
@@ -54,12 +54,12 @@ architecture Behavioral of main is
     signal r_CNT_2ms : natural range 0 to c_CNT_2ms;
     
     --Toggles
-    signal r_TOGGLE_50 : std_logic := '0';
-    signal r_TOGGLE_25 : std_logic := '0';
-    signal r_TOGGLE_12_5 : std_logic := '0';
-    signal r_TOGGLE_6_25 : std_logic := '0';
-    signal r_TOGGLE_3_12 : std_logic := '0';
-    signal r_TOGGLE_1_56 : std_logic := '0';
+    signal r_TOGGLE_50 : std_logic := '1';
+    signal r_TOGGLE_25 : std_logic := '1';
+    signal r_TOGGLE_12_5 : std_logic := '1';
+    signal r_TOGGLE_6_25 : std_logic := '1';
+    signal r_TOGGLE_3_12 : std_logic := '1';
+    signal r_TOGGLE_1_56 : std_logic := '1';
     
     --Counter used for binary counter
     signal counter : natural range 0 to 31;
@@ -180,7 +180,6 @@ begin
             
                 if r_CNT_50 = c_CNT_50 - 1 then
                    
-                    led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
                     led_signal(0) <= r_TOGGLE_50;
                     r_TOGGLE_50 <= not r_TOGGLE_50;
                     r_cnt_50 <= 0;
@@ -191,16 +190,14 @@ begin
                    
                 end if; 
                 
-                state <= next_state;
+                
                        
             when S1 =>
             
                if r_CNT_25 = c_CNT_25 - 1 then
                
-                   led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
                    led_signal(0) <= r_TOGGLE_25;
                    r_TOGGLE_25 <= not r_TOGGLE_25;
-
                    r_cnt_25 <= 0;
                     
                else
@@ -209,60 +206,76 @@ begin
                    
                end if; 
                
-               state <= next_state;
+               
 
             when S2 =>
             
                if r_CNT_12_5 = c_CNT_12_5 - 1 then
-                   led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
+                    
                    led_signal(0) <= r_TOGGLE_12_5;
                    r_TOGGLE_12_5 <= not r_TOGGLE_12_5;
 
                     r_cnt_12_5 <= 0;
+                    
                else
+               
                    r_cnt_12_5 <= r_cnt_12_5 + 1;
+                   
                end if;
                
-               state <= next_state;
+               
 
             when S3 =>
             
                if r_CNT_6_25 = c_CNT_6_25 - 1 then
-                   led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
+               
                    led_signal(0) <= r_TOGGLE_6_25;
                    r_TOGGLE_6_25 <= not r_TOGGLE_6_25;
-                    r_cnt_6_25 <= 0;
+                   r_cnt_6_25 <= 0;
+                   
                else
                    r_cnt_6_25 <= r_cnt_6_25 + 1;
                end if;
                
-               state <= next_state;
+              
 
             when S4 =>
             
                if r_CNT_3_12 = c_CNT_3_12 - 1 then
-                   led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
+                    
                    led_signal(0) <= r_TOGGLE_3_12;
                    r_TOGGLE_3_12 <= not r_TOGGLE_3_12;
-                    r_cnt_3_12 <= 0;
+                   r_cnt_3_12 <= 0;
+                   
                else
+               
                    r_cnt_3_12 <= r_cnt_3_12 + 1;
+                   
                end if;
                
-               state <= next_state;
+               
+               
             when S5 =>
             
                if r_CNT_1_56 = c_CNT_1_56 - 1 then
-                   led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
+                    
                    led_signal(0) <= r_TOGGLE_1_56;
                    r_TOGGLE_1_56 <= not r_TOGGLE_1_56;
-                    r_cnt_1_56 <= 0;
+                   r_cnt_1_56 <= 0;
+                    
                else
+               
                    r_cnt_1_56 <= r_cnt_1_56 + 1;
+                   
                end if;
                
-               state <= next_state;
+               
+               
         end case;
+        
+        led_signal(5 downto 1) <= std_logic_vector(TO_UNSIGNED(counter,5)); 
+        state <= next_state;
+        
     end if;
 
 end process;
